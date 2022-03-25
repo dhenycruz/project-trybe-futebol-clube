@@ -17,10 +17,12 @@ class App {
     };
 
     this.app.use(accessControl);
-    // ...
+
+    this.app.get('/login', (_res, res) => res
+      .status(200)
+      .json({ message: 'Testando!' }));
   }
 
-  // ...
   public start(PORT: string | number):void {
     this.app.listen(PORT, () => console.warn('Listen on', PORT));
   }
