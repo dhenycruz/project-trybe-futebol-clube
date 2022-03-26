@@ -18,7 +18,7 @@ class App {
 
     this.app.use(accessControl);
 
-    this.app.get('/login', (_res, res) => res
+    this.app.post('/login', (_res, res) => res
       .status(200)
       .json({ message: 'Testando!' }));
   }

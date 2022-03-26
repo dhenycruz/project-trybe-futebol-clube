@@ -11,10 +11,12 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
+
 /* testando controller login */
 describe('Testando o endpoint login', () => {
   let chaiHttpResponse: Response;
 
+  /* Requisito 04 */
   it('retorna uma resposta com status 200 se o login for feito com sucesso', async () => {
     const body = {
       email: 'dhenymail.com',
@@ -32,12 +34,44 @@ describe('Testando o endpoint login', () => {
     }
 
     chaiHttpResponse = await chai.request(app)
-    .get('/login')
+    .post('/login')
     .send(body)
     .then((res) => {
       expect(res.status).to.be.equal(200);
       expect(res.body).to.be.eql(bodyResponse);
     }) as Response;
+  });
+
+  /* Requisito 06 */
+  it('Se não for informado um email inválido, deverá retornar um erro 401', async () => {
+    const body = {
+      email: 'mailmail.com',
+      password: '1234123'
+    };
+
+    chaiHttpResponse = await chai.request(app)
+    .post('/login')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(401);
+      expect(res.body).to.be.eql({ message: 'Incorrect email or password'});
+    }) as Response;
+  });
+
+  /* requisito 08 */
+  it('Se for informado uma senha inválida deverá retornar um erro', async () => {
+    const body = {
+      email: 'email@email.com',
+      password: '123'
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .post('/login')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(401);
+      expect(res.body).to.be.eql({ message: 'Incorrect email or password' });
+    }) as  Response;
   });
 });
 
