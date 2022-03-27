@@ -48,4 +48,4 @@ services:
     cap_add:
       - SYS_NICE # Deve omitir alertas menores
     ports:
-      - 3002:3306
+      - 3306:3306
