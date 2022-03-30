@@ -20,7 +20,7 @@ Club.init({
 }, {
   underscored: true,
   sequelize: db,
-  modelName: 'Club',
+  modelName: 'club',
 });
 
 export default Club;

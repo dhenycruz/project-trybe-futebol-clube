@@ -1,10 +1,16 @@
 import LoginService from '../services/login.service';
 
+const service = new LoginService();
+
 export default class LoginController {
-  readonly service: LoginService;
+  private email: string;
+
+  private passowrd: string;
 
   async logining(email: string, password: string) {
-    const result = this.service.logining(email, password);
+    this.email = email;
+    this.passowrd = password;
+    const result = service.logining(this.email, this.passowrd);
     return result;
   }
 }

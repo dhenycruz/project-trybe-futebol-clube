@@ -20,6 +20,7 @@ class App {
       next();
     };
 
+    this.app.use(express.json());
     this.app.use(accessControl);
 
     this.app.post('/login', async (req: Request, res: Response) => {

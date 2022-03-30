@@ -1,3 +1,5 @@
+import bcryptjs = require('bcryptjs');
+import fs = require('fs');
 import AuthToken from '../token/token';
 import User from '../database/models/user';
 
@@ -18,12 +20,23 @@ export default class LoginService {
     this.password = password;
 
     const resultEmail = await User.findAll({ where: { email } });
-    const resultPassword = await User.findAll({ where: { password } });
 
-    if (!resultEmail.length || !resultPassword.length) return false;
+    if (!resultEmail.length) return false;
+
+    const comp = bcryptjs.compareSync(this.password, resultEmail[0].password);
+
+    if (!comp) return false;
 
     const resultToken = token.createToken(resultEmail[0]);
 
-    return { user: resultEmail[0], token: resultToken };
+    fs.writeFileSync('./jwt.evaluation.key', JSON.stringify(resultToken));
+
+    return { user: {
+      id: resultEmail[0].id,
+      username: resultEmail[0].username,
+      role: resultEmail[0].role,
+      email: resultEmail[0].email,
+    },
+    token: resultToken };
   }
 }
