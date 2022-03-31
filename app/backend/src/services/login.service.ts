@@ -1,5 +1,4 @@
-import bcryptjs = require('bcryptjs');
-import fs = require('fs');
+import bcrypt = require('bcryptjs');
 import AuthToken from '../token/token';
 import User from '../database/models/user';
 
@@ -10,11 +9,6 @@ export default class LoginService {
 
   private password: string;
 
-  /* constructor(email: string, password: string) {
-    this.email = email;
-    this.password = password;
-  } */
-
   async logining(email: string, password: string) {
     this.email = email;
     this.password = password;
@@ -23,13 +17,12 @@ export default class LoginService {
 
     if (!resultEmail.length) return false;
 
-    const comp = bcryptjs.compareSync(this.password, resultEmail[0].password);
+    /* const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(this.password, salt); */
 
-    if (!comp) return false;
+    if (!bcrypt.compareSync(this.password, resultEmail[0].password)) return false;
 
     const resultToken = token.createToken(resultEmail[0]);
-
-    fs.writeFileSync('./jwt.evaluation.key', JSON.stringify(resultToken));
 
     return { user: {
       id: resultEmail[0].id,
