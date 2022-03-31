@@ -1,8 +1,5 @@
 import * as express from 'express';
-import { Request, Response } from 'express';
-import LoginController from './controller/login.controller';
-
-const login = new LoginController();
+import loginRoute from './routes/login.route';
 
 class App {
   public app: express.Express;
@@ -23,11 +20,7 @@ class App {
     this.app.use(express.json());
     this.app.use(accessControl);
 
-    this.app.post('/login', async (req: Request, res: Response) => {
-      const { email, password } = req.body;
-      const result = await login.logining(email, password);
-      res.status(200).json(result);
-    });
+    this.app.use(loginRoute);
   }
 
   public start(PORT: string | number):void {
