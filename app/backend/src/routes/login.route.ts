@@ -19,7 +19,7 @@ loginRoute.post(
     const { password } = req.body;
     const result = login.verifyPassword(password);
 
-    if (result !== true) return res.status(result.status).json({ messsage: result.message });
+    if (result !== true) return res.status(result.status).json({ message: result.message });
     next();
   },
   async (req, res) => {
