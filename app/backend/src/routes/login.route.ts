@@ -15,6 +15,13 @@ loginRoute.post(
 
     next();
   },
+  (req, res, next) => {
+    const { password } = req.body;
+    const result = login.verifyPassword(password);
+
+    if (result !== true) return res.status(result.status).json({ messsage: result.message });
+    next();
+  },
   async (req, res) => {
     const { email, password } = req.body;
     const result = await login.logining(email, password);

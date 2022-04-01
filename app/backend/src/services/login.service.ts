@@ -18,9 +18,6 @@ export default class LoginService {
 
     if (!resultEmail.length) return false;
 
-    /* const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(this.password, salt); */
-
     if (!bcrypt.compareSync(this.password, resultEmail[0].password)) return false;
 
     const resultToken = token.createToken(resultEmail[0]);
