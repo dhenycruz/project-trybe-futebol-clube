@@ -12,6 +12,8 @@ export default class LoginController {
 
   private passowrd: string;
 
+  private token: string;
+
   async logining(email: string, password: string) {
     this.email = email;
     this.passowrd = password;
@@ -42,5 +44,15 @@ export default class LoginController {
     if (!passowrd) return { status: 401, message: 'All fields must be filled' };
 
     return true;
+  }
+
+  async validateLogin(tokenHeader: string) {
+    this.token = tokenHeader;
+
+    const result = await service.validateLogin(this.token);
+
+    if (result === false) return { status: 401, message: 'Token invalid!' };
+
+    return result.user;
   }
 }

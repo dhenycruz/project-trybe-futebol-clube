@@ -9,7 +9,12 @@ interface ReturnVerify {
 
 interface Itoken {
   createToken(user: Iuser): string,
-  authToken(token: string): Promise<boolean>
+  authToken(token: string): Promise<false | IAuthToken>
+}
+
+interface IAuthToken {
+  auth: boolean,
+  user: string,
 }
 
 export default class Token implements Itoken {
@@ -24,14 +29,19 @@ export default class Token implements Itoken {
     return this.token;
   }
 
-  async authToken(token: string): Promise <boolean> {
+  async authToken(token: string): Promise <false | IAuthToken> {
     const secret = fs.readFileSync('./jwt.evaluation.key');
     const decodec = jwt.verify(token, secret) as ReturnVerify;
     const user = await modelUser.findAll({ where: {
       email: decodec.data.email,
     } });
 
-    if (!user) return !this.authentication;
-    return this.authentication;
+    this.authentication = false;
+    if (!user) return this.authentication;
+
+    return {
+      auth: true,
+      user: decodec.data.role,
+    };
   }
 }

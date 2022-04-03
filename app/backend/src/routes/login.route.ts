@@ -29,4 +29,12 @@ loginRoute.post(
   },
 );
 
+loginRoute.get('/login/validate', async (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization) return res.status(401).json({ message: 'No authorization!' });
+
+  const result = await login.validateLogin(authorization);
+  res.json(result);
+});
+
 export default loginRoute;

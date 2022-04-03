@@ -5,10 +5,17 @@ import verifyEmail from '../validation/validation';
 
 const token = new AuthToken();
 
+interface IAuthToken {
+  auth: boolean,
+  user: string,
+}
+
 export default class LoginService {
   private email: string;
 
   private password: string;
+
+  private token: string;
 
   async logining(email: string, password: string) {
     this.email = email;
@@ -36,5 +43,10 @@ export default class LoginService {
     const result = verifyEmail(email);
     if (!result) return false;
     return true;
+  }
+
+  async validateLogin(tokenHeader: string): Promise <false | IAuthToken> {
+    this.token = tokenHeader;
+    return token.authToken(this.token);
   }
 }
