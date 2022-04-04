@@ -12,4 +12,14 @@ clubRouter.get(
   },
 );
 
+clubRouter.get(
+  '/clubs/:id',
+  async (req, res) => {
+    const { id } = req.params;
+    const result = await controller.get(Number(id));
+    if (!result) return res.status(404).send('Club Not Found');
+    res.json(result);
+  },
+);
+
 export default clubRouter;
