@@ -22,6 +22,6 @@ export default class ClubController {
   async getAll(): Promise<Iclub[]> {
     const clubs = await service.getAll();
     this.clubs = clubs;
-    return this.clubs as Iclub[];
+    return this.clubs;
   }
 }
