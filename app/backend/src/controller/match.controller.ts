@@ -19,4 +19,10 @@ export default class MatchController {
     this.matchs = matchs;
     return this.matchs;
   }
+
+  async getQueryString(queryString: string): Promise<Imatchs[]> {
+    const matchs = await service.getQueryString(queryString);
+    this.matchs = matchs;
+    return this.matchs;
+  }
 }
