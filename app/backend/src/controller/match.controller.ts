@@ -60,4 +60,9 @@ export default class MatchController {
     this.newMatch = result;
     return this.newMatch;
   }
+
+  async finishMatch(id: number) {
+    this.error = true;
+    await service.finishMatch(id);
+  }
 }

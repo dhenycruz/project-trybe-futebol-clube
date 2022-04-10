@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import verifyToken from '../middleware/verifyToken';
 import MatchController from '../controller/match.controller';
+import finishMatch from '../middleware/match';
 
 const matchRouter = Router();
 const controller = new MatchController();
@@ -54,6 +55,14 @@ matchRouter.post(
 
 matchRouter.patch(
   '/matchs/:id/finish',
+  verifyToken,
+  finishMatch,
+);
+
+matchRouter.patch(
+  '/matchs/:id',
+  verifyToken,
+  finishMatch,
 );
 
 export default matchRouter;
