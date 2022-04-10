@@ -82,7 +82,7 @@ export default class MatchService {
     const awayClub = await Club.findAll({ where: { id: awayTeam } });
 
     if (!homeClub.length || !awayClub.length) {
-      return { status: 401, message: 'Team not found' };
+      return { status: 401, message: 'There is no team with such id!' };
     }
 
     return true;
@@ -96,5 +96,14 @@ export default class MatchService {
     });
     this.newMatch = newMatch;
     return newMatch;
+  }
+
+  async finishMatch(id: number) {
+    this.queryString = false;
+
+    await Match.update(
+      { inProgress: false },
+      { where: { id } },
+    );
   }
 }
