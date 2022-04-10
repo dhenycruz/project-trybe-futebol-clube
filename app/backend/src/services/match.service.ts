@@ -1,5 +1,6 @@
 import Match from '../database/models/Match';
 import Club from '../database/models/Club';
+import validateMatch from '../validation/match.validation';
 
 interface Imatchs {
   id: number,
@@ -16,6 +17,11 @@ interface InewMatch {
   awayTeam: number,
   awayTeamGoals: number,
   inProgress: boolean
+}
+
+interface IError {
+  status: number;
+  message: string;
 }
 
 export default class MatchService {
@@ -58,8 +64,33 @@ export default class MatchService {
     return matchs;
   }
 
+  async validateEqualsTeams(bodyMatch: InewMatch): Promise <IError | true> {
+    this.newMatch = bodyMatch;
+    const { homeTeam, awayTeam } = bodyMatch;
+    if (!validateMatch.validateEqualsTeams(homeTeam, awayTeam)) {
+      return { status: 401, message: 'It is not possible to create a match with two equal teams' };
+    }
+
+    return true;
+  }
+
+  async validateExistsClub(bodyMatch: InewMatch): Promise <IError | true> {
+    this.newMatch = bodyMatch;
+    const { homeTeam, awayTeam } = bodyMatch;
+
+    const homeClub = await Club.findAll({ where: { id: homeTeam } });
+    const awayClub = await Club.findAll({ where: { id: awayTeam } });
+
+    if (!homeClub.length || !awayClub.length) {
+      return { status: 401, message: 'Team not found' };
+    }
+
+    return true;
+  }
+
   async createMatch(bodyMatch: InewMatch): Promise <Imatchs> {
     const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = bodyMatch;
+
     const newMatch = await Match.create({
       homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress,
     });

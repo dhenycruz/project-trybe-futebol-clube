@@ -29,11 +29,31 @@ matchRouter.get(
 matchRouter.post(
   '/matchs',
   verifyToken,
+  async (req, res, next) => {
+    const { body } = req;
+    const result = await controller.validateEqualsTeams(body);
+    if (result !== true) return res.status(result.status).json({ message: result.message });
+
+    next();
+  },
+
+  async (req, res, next) => {
+    const { body } = req;
+    const result = await controller.validateExistsClub(body);
+    if (result !== true) return res.status(result.status).json({ message: result.message });
+
+    next();
+  },
+
   async (req, res) => {
     const { body } = req;
     const result = await controller.createMatch(body);
     res.json(result);
   },
+);
+
+matchRouter.patch(
+  '/matchs/:id/finish',
 );
 
 export default matchRouter;
