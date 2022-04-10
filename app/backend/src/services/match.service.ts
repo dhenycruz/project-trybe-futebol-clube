@@ -1,5 +1,5 @@
-import Match from '../database/models/match';
-import Club from '../database/models/club';
+import Match from '../database/models/Match';
+import Club from '../database/models/Club';
 
 interface Imatchs {
   id: number,
@@ -10,8 +10,18 @@ interface Imatchs {
   inProgress: boolean
 }
 
+interface InewMatch {
+  homeTeam: number,
+  homeTeamGoals: number,
+  awayTeam: number,
+  awayTeamGoals: number,
+  inProgress: boolean
+}
+
 export default class MatchService {
   private matchs: Imatchs[];
+
+  private newMatch: InewMatch;
 
   private queryString: boolean;
 
@@ -46,5 +56,14 @@ export default class MatchService {
     });
     this.matchs = matchs;
     return matchs;
+  }
+
+  async createMatch(bodyMatch: InewMatch): Promise <Imatchs> {
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = bodyMatch;
+    const newMatch = await Match.create({
+      homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress,
+    });
+    this.newMatch = newMatch;
+    return newMatch;
   }
 }

@@ -1,6 +1,6 @@
 import fs = require('fs');
 import jwt = require('jsonwebtoken');
-import modelUser from '../database/models/user';
+import modelUser from '../database/models/User';
 import { Iuser } from '../interfaces/user.interface';
 
 interface ReturnVerify {

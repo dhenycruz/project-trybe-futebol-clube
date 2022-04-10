@@ -1,4 +1,4 @@
-import Club from '../database/models/club';
+import Club from '../database/models/Club';
 
 interface Iclub {
   id: number;

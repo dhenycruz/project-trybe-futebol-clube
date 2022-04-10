@@ -1,6 +1,6 @@
 import bcrypt = require('bcryptjs');
 import AuthToken from '../token/token';
-import User from '../database/models/user';
+import User from '../database/models/User';
 import verifyEmail from '../validation/validation';
 
 const token = new AuthToken();

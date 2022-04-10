@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import verifyToken from '../middleware/verifyToken';
 import MatchController from '../controller/match.controller';
 
 const matchRouter = Router();
@@ -22,6 +23,16 @@ matchRouter.get(
 
     const resultQUery = await controller.getQueryString(inProgress);
     res.json(resultQUery);
+  },
+);
+
+matchRouter.post(
+  '/matchs',
+  verifyToken,
+  async (req, res) => {
+    const { body } = req;
+    const result = await controller.createMatch(body);
+    res.json(result);
   },
 );
 
