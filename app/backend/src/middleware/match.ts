@@ -5,7 +5,8 @@ const controller = new MatchController();
 
 const finishMatch = async (req: Request, res: Response) => {
   const { id } = req.params;
-  await controller.finishMatch(Number(id));
+  const { body } = req;
+  await controller.finishMatch(Number(id), body);
   res.send();
 };
 

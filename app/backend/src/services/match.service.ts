@@ -11,6 +11,13 @@ interface Imatchs {
   inProgress: boolean
 }
 
+interface IBodyMatch {
+  homeTeam: number,
+  homeTeamGoals: number,
+  awayTeam: number,
+  awayTeamGoals: number
+}
+
 interface InewMatch {
   homeTeam: number,
   homeTeamGoals: number,
@@ -98,11 +105,12 @@ export default class MatchService {
     return newMatch;
   }
 
-  async finishMatch(id: number) {
+  async finishMatch(id: number, body: IBodyMatch) {
     this.queryString = false;
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = body;
 
     await Match.update(
-      { inProgress: false },
+      { inProgress: false, homeTeam, awayTeam, homeTeamGoals, awayTeamGoals },
       { where: { id } },
     );
   }

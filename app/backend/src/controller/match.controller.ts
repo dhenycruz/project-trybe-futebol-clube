@@ -11,6 +11,13 @@ interface Imatchs {
   inProgress: boolean
 }
 
+interface IBodyMatch {
+  homeTeam: number,
+  homeTeamGoals: number,
+  awayTeam: number,
+  awayTeamGoals: number
+}
+
 interface InewMatch {
   homeTeam: number,
   homeTeamGoals: number,
@@ -61,8 +68,8 @@ export default class MatchController {
     return this.newMatch;
   }
 
-  async finishMatch(id: number) {
+  async finishMatch(id: number, body: IBodyMatch) {
     this.error = true;
-    await service.finishMatch(id);
+    await service.finishMatch(id, body);
   }
 }
