@@ -7,7 +7,7 @@ const finishMatch = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { body } = req;
   await controller.finishMatch(Number(id), body);
-  res.send();
+  res.json({ message: ' Finalizado' });
 };
 
 export default finishMatch;
