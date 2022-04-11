@@ -120,7 +120,7 @@ export default class MatchService {
     const { homeTeamGoals, awayTeamGoals } = body;
 
     await Match.update(
-      { homeTeamGoals, awayTeamGoals },
+      { inProgress: false, homeTeamGoals, awayTeamGoals },
       { where: { id } },
     );
   }
