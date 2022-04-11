@@ -72,4 +72,9 @@ export default class MatchController {
     this.error = true;
     await service.finishMatch(id, body);
   }
+
+  async editMatch(id: number, body: IBodyMatch) {
+    this.error = true;
+    await service.editMatch(id, body);
+  }
 }

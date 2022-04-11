@@ -62,6 +62,12 @@ matchRouter.patch(
 matchRouter.patch(
   '/matchs/:id',
   verifyToken,
+  async (req, res) => {
+    const { id } = req.params;
+    const { body } = req;
+    await controller.editMatch(Number(id), body);
+    res.json({ message: 'Editado com sucesso!' });
+  },
 );
 
 export default matchRouter;

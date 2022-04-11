@@ -114,4 +114,14 @@ export default class MatchService {
       { where: { id } },
     );
   }
+
+  async editMatch(id: number, body: IBodyMatch) {
+    this.queryString = false;
+    const { homeTeamGoals, awayTeamGoals } = body;
+
+    await Match.update(
+      { homeTeamGoals, awayTeamGoals },
+      { where: { id } },
+    );
+  }
 }
