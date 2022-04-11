@@ -18,7 +18,6 @@ export default class LoginController {
     this.email = email;
     this.passowrd = password;
     const result = await service.logining(this.email, this.passowrd);
-    console.log(result);
     if (result === false) return { status: 401, message: 'Incorrect email or password' };
 
     return result;
@@ -26,8 +25,6 @@ export default class LoginController {
 
   verifyEmail(email: string): Error | true {
     this.email = email;
-
-    console.log(typeof email);
 
     if (!email) return { status: 401, message: 'All fields must be filled' };
 

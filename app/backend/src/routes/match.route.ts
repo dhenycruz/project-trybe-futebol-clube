@@ -49,7 +49,7 @@ matchRouter.post(
   async (req, res) => {
     const { body } = req;
     const result = await controller.createMatch(body);
-    res.status(200).json(result);
+    res.status(201).json(result);
   },
 );
 
