@@ -198,7 +198,7 @@ export default class Leaderboard extends LeaderboardBase {
     const clubs = await serviceClub.getAll();
     const result = await Promise.all(clubs.map(async (club) => {
       const matchs = await Match.findAll({
-        where: { inProgress: false, awaTeam: club.id },
+        where: { inProgress: false, awayTeam: club.id },
       });
       return this.calculateTeamPerformanceAway(club.id, club.clubName, matchs);
     }));
