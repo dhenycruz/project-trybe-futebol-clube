@@ -1,22 +1,24 @@
 import { Op } from 'sequelize';
 import ClubService from './club.service';
 import Match from '../database/models/Match';
+import LeaderboardBase from './leaderboardBase.service';
 
 const serviceClub = new ClubService();
 
-export default class Leaderboard {
-  private totalPointsHome: number;
+interface IClubPerfomance {
+  name: string,
+  totalPoints: number,
+  totalGames: number,
+  totalVictories: number,
+  totalDraws: number,
+  totalLosses: number,
+  goalsFavor: number,
+  goalsOwn: number,
+  goalsBalance: number,
+  efficiency: number
+}
 
-  private totalPointsAway: number;
-
-  private totalWinsHome: number;
-
-  private totalWinsAway: number;
-
-  private totalDrawHome: number;
-
-  private totalDrawAway: number;
-
+export default class Leaderboard extends LeaderboardBase {
   private totalLossesHome: number;
 
   private totalLossesAway: number;
@@ -24,6 +26,8 @@ export default class Leaderboard {
   private totalGoals: number;
 
   private totalGoalsOwn: number;
+
+  private classification: IClubPerfomance[];
 
   countGoals(clubId: number, matchs: Match[]) {
     const totalGoals = matchs.reduce((goals, match) => {
@@ -65,22 +69,6 @@ export default class Leaderboard {
     return totalGoalsOwn;
   }
 
-  countWinshome(clubId:number, matchs: Match[]) {
-    const totalWins = matchs.reduce((wins, match) => {
-      let sumWins = wins;
-      const { homeTeam, homeTeamGoals, awayTeamGoals } = match;
-
-      if (homeTeam === clubId && homeTeamGoals > awayTeamGoals) {
-        sumWins += 1;
-      }
-
-      return sumWins;
-    }, 0);
-
-    this.totalPointsHome = totalWins;
-    return totalWins;
-  }
-
   countLossesHome(clubId: number, matchs: Match[]) {
     const totalLosses = matchs.reduce((losses, match) => {
       let sumLosses = losses;
@@ -113,93 +101,7 @@ export default class Leaderboard {
     return totalLosses;
   }
 
-  countWinsAway(clubId:number, matchs: Match[]) {
-    const totalWins = matchs.reduce((pts, match) => {
-      let sumWins = pts;
-      const { awayTeam, homeTeamGoals, awayTeamGoals } = match;
-
-      if (awayTeam === clubId && homeTeamGoals < awayTeamGoals) {
-        sumWins += 1;
-      }
-
-      return sumWins;
-    }, 0);
-
-    this.totalPointsAway = totalWins;
-    return totalWins;
-  }
-
-  countDrawHome(clubId: number, matchs: Match[]) {
-    const totalDraws = matchs.reduce((draws, match) => {
-      let sumDraws = draws;
-      const { homeTeam, homeTeamGoals, awayTeamGoals } = match;
-
-      if (homeTeam === clubId && homeTeamGoals === awayTeamGoals) {
-        sumDraws += 1;
-      }
-
-      return sumDraws;
-    }, 0);
-
-    this.totalDrawHome = totalDraws;
-    return totalDraws;
-  }
-
-  countDrawAway(clubId: number, matchs: Match[]) {
-    const totalDraws = matchs.reduce((draws, match) => {
-      let sumDraws = draws;
-      const { awayTeam, homeTeamGoals, awayTeamGoals } = match;
-
-      if (awayTeam === clubId && homeTeamGoals === awayTeamGoals) {
-        sumDraws += 1;
-      }
-
-      return sumDraws;
-    }, 0);
-
-    this.totalDrawAway = totalDraws;
-    return totalDraws;
-  }
-
-  pointsHome(clubId:number, matchs: Match[]) {
-    const totalPoints = matchs.reduce((pts, match) => {
-      let sumPts = pts;
-      const { homeTeam, homeTeamGoals, awayTeamGoals } = match;
-
-      if (homeTeam === clubId && homeTeamGoals > awayTeamGoals) {
-        sumPts += 3;
-      }
-      if (homeTeam === clubId && homeTeamGoals === awayTeamGoals) {
-        sumPts += 1;
-      }
-
-      return sumPts;
-    }, 0);
-
-    this.totalPointsHome = totalPoints;
-    return totalPoints;
-  }
-
-  pointsAway(clubId: number, matchs: Match[]) {
-    const totalPoints = matchs.reduce((pts, match) => {
-      let sumPts = pts;
-      const { awayTeam, homeTeamGoals, awayTeamGoals } = match;
-
-      if (awayTeam === clubId && homeTeamGoals > awayTeamGoals) {
-        sumPts += 3;
-      }
-      if (awayTeam === clubId && homeTeamGoals === awayTeamGoals) {
-        sumPts += 1;
-      }
-
-      return sumPts;
-    }, 0);
-
-    this.totalPointsAway = totalPoints;
-    return totalPoints;
-  }
-
-  async calculateTeamPerformance(clubId:number, clubName: string, matchs: Match[]) {
+  async calculateTeamPerformanceAll(clubId:number, clubName: string, matchs: Match[]) {
     const points = this.pointsHome(clubId, matchs) + this.pointsAway(clubId, matchs);
     const wins = this.countWinshome(clubId, matchs) + this.countWinsAway(clubId, matchs);
     const draws = this.countDrawHome(clubId, matchs) + this.countDrawAway(clubId, matchs);
@@ -208,7 +110,7 @@ export default class Leaderboard {
     const goalsOwn = this.countGoalsOwn(clubId, matchs);
 
     return {
-      Team: clubName,
+      name: clubName,
       totalPoints: points,
       totalGames: matchs.length,
       totalVictories: wins,
@@ -217,20 +119,110 @@ export default class Leaderboard {
       goalsFavor: goals,
       goalsOwn,
       goalsBalance: goals - goalsOwn,
-      efficiency: (points / (matchs.length * 3)) * 100,
+      efficiency: Number(((points / (matchs.length * 3)) * 100).toFixed(2)),
+    };
+  }
+
+  async calculateTeamPerformanceHome(clubId:number, clubName: string, matchs: Match[]) {
+    const points = this.pointsHome(clubId, matchs);
+    const wins = this.countWinshome(clubId, matchs);
+    const draws = this.countDrawHome(clubId, matchs);
+    const losses = this.countLossesHome(clubId, matchs);
+    const goals = this.countGoals(clubId, matchs);
+    const goalsOwn = this.countGoalsOwn(clubId, matchs);
+
+    return {
+      name: clubName,
+      totalPoints: points,
+      totalGames: matchs.length,
+      totalVictories: wins,
+      totalDraws: draws,
+      totalLosses: losses,
+      goalsFavor: goals,
+      goalsOwn,
+      goalsBalance: goals - goalsOwn,
+      efficiency: Number(((points / (matchs.length * 3)) * 100).toFixed(2)),
+    };
+  }
+
+  async calculateTeamPerformanceAway(clubId:number, clubName: string, matchs: Match[]) {
+    const points = this.pointsAway(clubId, matchs);
+    const wins = this.countWinsAway(clubId, matchs);
+    const draws = this.countDrawAway(clubId, matchs);
+    const losses = this.countLossesAway(clubId, matchs);
+    const goals = this.countGoals(clubId, matchs);
+    const goalsOwn = this.countGoalsOwn(clubId, matchs);
+
+    return {
+      name: clubName,
+      totalPoints: points,
+      totalGames: matchs.length,
+      totalVictories: wins,
+      totalDraws: draws,
+      totalLosses: losses,
+      goalsFavor: goals,
+      goalsOwn,
+      goalsBalance: goals - goalsOwn,
+      efficiency: Number(((points / (matchs.length * 3)) * 100).toFixed(2)),
     };
   }
 
   async getLeaderAll() {
     const clubs = await serviceClub.getAll();
-    return Promise.all(clubs.map(async (club) => {
+    const result = await Promise.all(clubs.map(async (club) => {
       const matchs = await Match.findAll({
         where: {
           inProgress: false,
           [Op.or]: [{ homeTeam: club.id }, { awayTeam: club.id }],
         },
       });
-      return this.calculateTeamPerformance(club.id, club.clubName, matchs);
+      return this.calculateTeamPerformanceAll(club.id, club.clubName, matchs);
     }));
+
+    return this.classificationTeams(result);
+  }
+
+  async getLeaderHome() {
+    const clubs = await serviceClub.getAll();
+    const result = await Promise.all(clubs.map(async (club) => {
+      const matchs = await Match.findAll({
+        where: { inProgress: false, homeTeam: club.id },
+      });
+      return this.calculateTeamPerformanceHome(club.id, club.clubName, matchs);
+    }));
+
+    return this.classificationTeams(result);
+  }
+
+  async getLeaderAway() {
+    const clubs = await serviceClub.getAll();
+    const result = await Promise.all(clubs.map(async (club) => {
+      const matchs = await Match.findAll({
+        where: { inProgress: false, awaTeam: club.id },
+      });
+      return this.calculateTeamPerformanceAway(club.id, club.clubName, matchs);
+    }));
+
+    return this.classificationTeams(result);
+  }
+
+  classificationTeams(clubsPerfomance: IClubPerfomance[]) {
+    const classification = [...clubsPerfomance].sort((a: IClubPerfomance, b: IClubPerfomance) => {
+      if (a.totalPoints < b.totalLosses) return 1;
+      if (a.totalPoints > b.totalPoints) return -1;
+      if (a.totalVictories < b.totalVictories) return 1;
+      if (a.totalVictories > b.totalVictories) return -1;
+      if (a.goalsBalance < b.goalsBalance) return 1;
+      if (a.goalsBalance > b.goalsBalance) return -1;
+      if (a.goalsFavor < b.goalsFavor) return 1;
+      if (a.goalsFavor > b.goalsFavor) return -1;
+      if (a.goalsOwn < b.goalsOwn) return 1;
+      if (a.goalsOwn > b.goalsOwn) return -1;
+
+      return 0;
+    });
+
+    this.classification = classification;
+    return classification;
   }
 }
