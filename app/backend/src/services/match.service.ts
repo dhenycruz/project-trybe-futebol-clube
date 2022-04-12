@@ -2,15 +2,6 @@ import Match from '../database/models/Match';
 import Club from '../database/models/Club';
 import validateMatch from '../validation/match.validation';
 
-interface Imatchs {
-  id: number,
-  homeTeam: number,
-  homeTeamGoals: number,
-  awayTeam: number,
-  awayTeamGoals: number,
-  inProgress: boolean
-}
-
 interface IBodyMatch {
   homeTeam: number,
   homeTeamGoals: number,
@@ -32,7 +23,7 @@ interface IError {
 }
 
 export default class MatchService {
-  private matchs: Imatchs[];
+  private matchs: Match[];
 
   private newMatch: InewMatch;
 
@@ -42,8 +33,22 @@ export default class MatchService {
     this.queryString = true;
   }
 
-  async getAll(): Promise<Imatchs[]> {
+  async get(id: number): Promise<Match[]> {
     const matchs = await Match.findAll({
+      where: { homeTeam: id, $or: [{ awayTeam: id }] },
+      attributes: { exclude: ['home_team', 'away_team'] },
+      include: [
+        { model: Club, as: 'homeClub', attributes: { exclude: ['id'] } },
+        { model: Club, as: 'awayClub', attributes: { exclude: ['id'] } },
+      ],
+    });
+    this.matchs = matchs;
+    return matchs;
+  }
+
+  async getAll(): Promise<Match[]> {
+    const matchs = await Match.findAll({
+      attributes: { exclude: ['home_team', 'away_team'] },
       include: [
         { model: Club, as: 'homeClub', attributes: { exclude: ['id'] } },
         { model: Club, as: 'awayClub', attributes: { exclude: ['id'] } },
@@ -95,7 +100,7 @@ export default class MatchService {
     return true;
   }
 
-  async createMatch(bodyMatch: InewMatch): Promise <Imatchs> {
+  async createMatch(bodyMatch: InewMatch): Promise <Match> {
     const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = bodyMatch;
 
     const newMatch = await Match.create({

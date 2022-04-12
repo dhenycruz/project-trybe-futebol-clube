@@ -1,15 +1,7 @@
 import MatchService from '../services/match.service';
+import { IMatchs } from '../interfaces/match.interface';
 
 const service = new MatchService();
-
-interface Imatchs {
-  id: number,
-  homeTeam: number,
-  homeTeamGoals: number,
-  awayTeam: number,
-  awayTeamGoals: number,
-  inProgress: boolean
-}
 
 interface IBodyMatch {
   homeTeam: number,
@@ -32,19 +24,19 @@ interface IError {
 }
 
 export default class MatchController {
-  private matchs: Imatchs[];
+  private matchs: IMatchs[];
 
-  private newMatch: Imatchs;
+  private newMatch: IMatchs;
 
   private error: IError | true;
 
-  async getAll(): Promise<Imatchs[]> {
+  async getAll(): Promise<IMatchs[]> {
     const matchs = await service.getAll();
     this.matchs = matchs;
     return this.matchs;
   }
 
-  async getQueryString(queryString: string): Promise<Imatchs[]> {
+  async getQueryString(queryString: string): Promise<IMatchs[]> {
     const matchs = await service.getQueryString(queryString);
     this.matchs = matchs;
     return this.matchs;
@@ -62,7 +54,7 @@ export default class MatchController {
     return result;
   }
 
-  async createMatch(bodyMatch: InewMatch): Promise <Imatchs> {
+  async createMatch(bodyMatch: InewMatch): Promise <IMatchs> {
     const result = await service.createMatch(bodyMatch);
     this.newMatch = result;
     return this.newMatch;
