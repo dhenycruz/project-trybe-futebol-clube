@@ -132,7 +132,7 @@ Para adicionar uma partida é necessário usuário e senha, portanto a pessoa de
 
   - Serão `4` dias de projeto;
 
-  - Data de entrega para avaliação final do projeto: `28/03/2022 - 14:00h`.
+  - Data de entrega para avaliação final do projeto: `01/04/2022 - 14:00h`.
 
 ---
 
@@ -812,7 +812,7 @@ Para o desenvolvimento, o time de produto te deu uma imagem para construir a mod
   - caso algum dos times não esteja cadastrado no banco de dados, deve-se retornar o seguinte erro:
 
   ```json
-  { "message": "Team not found" }
+  { "message": "There is no team with such id!" }
   ```
 
 ### Editar Partidas
