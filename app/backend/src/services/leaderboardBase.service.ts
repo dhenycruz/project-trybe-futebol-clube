@@ -27,7 +27,6 @@ export default class LeaderboardBase {
 
       return sumPts;
     }, 0);
-
     this.totalPointsHome = totalPoints;
     return totalPoints;
   }

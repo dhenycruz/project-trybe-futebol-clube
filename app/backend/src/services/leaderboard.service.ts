@@ -208,7 +208,7 @@ export default class Leaderboard extends LeaderboardBase {
 
   classificationTeams(clubsPerfomance: IClubPerfomance[]) {
     const classification = [...clubsPerfomance].sort((a: IClubPerfomance, b: IClubPerfomance) => {
-      if (a.totalPoints < b.totalLosses) return 1;
+      if (a.totalPoints < b.totalPoints) return 1;
       if (a.totalPoints > b.totalPoints) return -1;
       if (a.totalVictories < b.totalVictories) return 1;
       if (a.totalVictories > b.totalVictories) return -1;
