@@ -5,12 +5,17 @@ const { resolve } = require('path');
 
 const testCoverage = async (app) => {
   const appPath = resolve(__dirname, '..', '..', 'app', app);
+  const testCommand = `npm --prefix ${appPath} run test:coverage:json &> /dev/null`;
 
-  await exec(`npm --prefix ${appPath} run test:coverage:json &> /dev/null`)
+  await exec(testCommand)
     .catch((error) => console
       .error(`Erro na execução do teste de cobertura no "${app}":\n"${error.message || ''}"`));
 
   const path = resolve(appPath, 'coverage', 'coverage-summary.json');
+
+  const { stdout } = await exec(`cat ${path}`)
+
+  console.warn(`Rodando o comando '${testCommand}' para gerar e colher a cobertura de testes:\n\n`, JSON.parse(stdout));
 
   const { skipped, pct, covered } = await readFile(path, 'utf-8')
     .then((coverageTxt) => JSON.parse(coverageTxt))
