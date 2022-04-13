@@ -132,7 +132,7 @@ Para adicionar uma partida é necessário usuário e senha, portanto a pessoa de
 
   - Serão `4` dias de projeto;
 
-  - Data de entrega para avaliação final do projeto: `25/04/2022 - 14:00h`.
+  - Data de entrega para avaliação final do projeto: `01/04/2022 - 14:00h`.
 
 ---
 
