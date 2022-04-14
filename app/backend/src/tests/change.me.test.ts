@@ -6,6 +6,7 @@ import { app } from '../app';
 import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
+import exp from 'constants';
 
 chai.use(chaiHttp);
 
@@ -58,7 +59,7 @@ describe('Testando o endpoint login', () => {
     }) as Response;
   });
 
-  /* requisito 08 */
+  /* requisito 09 */
   it('Se for informado uma senha inválida deverá retornar um erro', async () => {
     const body = {
       email: 'email@email.com',
@@ -73,6 +74,36 @@ describe('Testando o endpoint login', () => {
       expect(res.body).to.be.eql({ message: 'Incorrect email or password' });
     }) as  Response;
   });
+
+  /* requisito 11 */
+  it('Se não informar o email deverá retornar um erro', async () => {
+    const body = {
+      password: '123'
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .post('/login')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(401);
+      expect(res.body).to.be.equal({ message: 'All fields must be filled'});
+    }) as Response;
+  });
+
+  /* requisito 13 */
+  it('Se não informar o password deverá retornar um erro', async () => {
+    const body = {
+      email: 'admin@admin.com'
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .post('/login')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(401);
+      expect(res.body).to.be.equal({ message: 'All fields must be filled' });
+    }) as Response;
+  })
 });
 
 /* describe('Seu teste', () => {
