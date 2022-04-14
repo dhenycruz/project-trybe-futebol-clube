@@ -6,7 +6,6 @@ import { app } from '../app';
 import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
-import exp from 'constants';
 
 chai.use(chaiHttp);
 
@@ -75,7 +74,8 @@ describe('Testando o endpoint login', () => {
     }) as  Response;
   });
 
-  /* requisito 11 */
+  /*
+   requisito 11 
   it('Se não informar o email deverá retornar um erro', async () => {
     const body = {
       password: '123'
@@ -90,7 +90,7 @@ describe('Testando o endpoint login', () => {
     }) as Response;
   });
 
-  /* requisito 13 */
+  requisito 13
   it('Se não informar o password deverá retornar um erro', async () => {
     const body = {
       email: 'admin@admin.com'
@@ -103,7 +103,23 @@ describe('Testando o endpoint login', () => {
       expect(res.status).to.be.equal(401);
       expect(res.body).to.be.equal({ message: 'All fields must be filled' });
     }) as Response;
-  })
+  });
+
+   requisito 14 
+  it('Verificará se tentar bater na rota com um token válido, o mesmo retornará o tipo de usuário', async () => {
+    const body = {
+      email: 'admin@admin.com',
+      password: 'secret_admin'
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .post('/login/validate')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.equal('admin');
+    }) as Response;
+  }); */
 });
 
 /* describe('Seu teste', () => {
