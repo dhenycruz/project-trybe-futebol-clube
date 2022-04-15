@@ -8,6 +8,9 @@ import Example from '../database/models/ExampleModel';
 import { Response } from 'superagent';
 
 const clubs = require('./data/clubs.json');
+const matchs = require('./data/matchs.json');
+const matchsInProgressTrue = require('./data/matchsInProgressTrue.json');
+const matchsInProgressFalse = require('./data/matchsInProgressFalse.json');
 
 chai.use(chaiHttp);
 
@@ -144,6 +147,40 @@ describe('Testando endpoit clubs', () => {
     .then((res) => {
       expect(res.status).to.be.equal(200);
       expect(res.body).to.be.eql(clubs[0]);
+    }) as Response;
+  });
+});
+
+describe('Testando endpoint matchs', () => {
+  let chaiHttpResponse: Response;
+
+  /* requisito 19 */
+  it('Retorna uma resposta com status 200 e com json com as partidas', async () => {
+    chaiHttpResponse = await chai.request(app)
+    .get('/matchs')
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.eql(matchs);
+    }) as Response;
+  });
+
+  /* requisito 20 */
+  it('retornar uma lista de partidas em progresso, filtradas por uma queryString', async () => {
+    chaiHttpResponse = await chai.request(app)
+    .get('/matchs?inProgress=true')
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.eql(matchsInProgressTrue);
+    }) as Response;
+  });
+
+  /* requisito 21 */
+  it('retornar uma lista de partidas finalizadas, filtradas por uma queryString', async () => {
+    chaiHttpResponse = await chai.request(app)
+    .get('/matchs?inProgress=false')
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.eql(matchsInProgressFalse);
     }) as Response;
   });
 });
