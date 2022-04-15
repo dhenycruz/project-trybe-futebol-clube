@@ -7,16 +7,18 @@ import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
 
+const clubs = require('./data/clubs.json');
+
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
 
-/* testando controller login */
+/* testando endpoit login */
 describe('Testando o endpoint login', () => {
   let chaiHttpResponse: Response;
 
-  /* Requisito 04 */
+  /* Requisito 05 */
   it('retorna uma resposta com status 200 se o login for feito com sucesso', async () => {
     const body = {
       email: 'dhenymail.com',
@@ -42,7 +44,7 @@ describe('Testando o endpoint login', () => {
     }) as Response;
   });
 
-  /* Requisito 06 */
+  /* Requisito 07 */
   it('Se não for informado um email inválido, deverá retornar um erro 401', async () => {
     const body = {
       email: 'mailmail.com',
@@ -121,6 +123,30 @@ describe('Testando o endpoint login', () => {
   });
 });
 
+/* testando endpoint clubs */
+describe('Testando endpoit clubs', () => {
+  let chaiHttpResponse: Response;
+
+  /* requisito 16 */
+  it('retorna uma resposta com status 200 e com json com os clubes', async () => {
+    chaiHttpResponse = await chai.request(app)
+    .get('/clubs')
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.eql(clubs);
+    }) as Response;
+  });
+
+  /* requisito 17 */
+  it('retorna uma resposta com status 200 e com json com um clube específico', async () => {
+    chaiHttpResponse = await chai.request(app)
+    .get('/clubs/1')
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.eql(clubs[0]);
+    }) as Response;
+  });
+});
 /* describe('Seu teste', () => {
    // Exemplo do uso de stubs com tipos
 
