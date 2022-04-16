@@ -227,6 +227,45 @@ describe('Testando endpoint matchs', () => {
       expect(res.status).to.be.equal(200);
     }) as Response;
   });
+
+  /* requisito 25 */
+  it('Testa que não é possível inserir uma partida com times iguais', async () => {
+    const body = {
+      "homeTeam": 3,
+      "awayTeam": 3,
+      "homeTeamGoals": 2,
+      "awayTeamGoals": 2,
+      "inProgress": 1
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .post('/matchs')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(401);
+      expect(res.body).to.be.eql({ message: 'It is not possible to create a match with two equal teams' });
+    }) as Response;
+  });
+
+  /* requisito 26 */
+  it('Testa que não é possível inserir uma partida com time que não existe na tabela clubs', async () => {
+    const body = {
+      "homeTeam": 59,
+      "awayTeam": 3,
+      "homeTeamGoals": 2,
+      "awayTeamGoals": 2,
+      "inProgress": 1
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .post('/matchs')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(401);
+      expect(res.body).to.be.eql({ message: 'There is no team with such id!' });
+    }) as Response;
+  });
+  
 });
 /* describe('Seu teste', () => {
    // Exemplo do uso de stubs com tipos
