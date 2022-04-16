@@ -211,6 +211,22 @@ describe('Testando endpoint matchs', () => {
       expect(res.body).to.be.eql(bodyResponse);
     }) as Response;
   });
+  /* requisito 24 */
+  it('A rota finaliza uma partida especifica através do id passato pela url', async () => {
+    const body = {
+      homeTeam: 16,
+      awayTeam: 8,
+      homeTeamGoals: 2,
+      awayTeamGoals: 2
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .patch('/matchs/1/finish')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+    }) as Response;
+  });
 });
 /* describe('Seu teste', () => {
    // Exemplo do uso de stubs com tipos
