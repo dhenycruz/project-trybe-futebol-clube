@@ -183,6 +183,34 @@ describe('Testando endpoint matchs', () => {
       expect(res.body).to.be.eql(matchsInProgressFalse);
     }) as Response;
   });
+
+  /* requisito 23 */
+  it('Cadastra um novo jogo no banco de dados e retorna esse jogo', async () => {
+    const body = {
+      "homeTeam": 16,
+      "awayTeam": 8,
+      "homeTeamGoals": 2,
+      "awayTeamGoals": 2,
+      "inProgress": true
+    };
+
+    const bodyResponse = {
+      "id": 1,
+      "homeTeam": 16,
+      "homeTeamGoals": 2,
+      "awayTeam": 8,
+      "awayTeamGoals": 2,
+      "inProgress": true,
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .post('/matchs')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.eql(bodyResponse);
+    }) as Response;
+  });
 });
 /* describe('Seu teste', () => {
    // Exemplo do uso de stubs com tipos
