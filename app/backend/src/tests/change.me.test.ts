@@ -1,6 +1,7 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
+import Club from '../database/models/Club';
 
 import { app } from '../app';
 import Example from '../database/models/ExampleModel';
@@ -42,8 +43,9 @@ describe('Testando o endpoint login', () => {
 describe('Testando endpoit clubs', () => {
   let chaiHttpResponse: Response;
 
-  /* requisito 16 */
+  /* requisito 16 */  
   it('retorna uma resposta com status 200 e com json com os clubes', async () => {
+    sinon.stub(Club, 'findAll').resolves(clubs);
     chaiHttpResponse = await chai.request(app)
     .get('/clubs')
     .then((res) => {
