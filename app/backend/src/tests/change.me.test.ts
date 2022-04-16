@@ -265,6 +265,21 @@ describe('Testando endpoint matchs', () => {
       expect(res.body).to.be.eql({ message: 'There is no team with such id!' });
     }) as Response;
   });
+
+  /* requisito 27 */
+  it('A rota atualiza o resultado de uma partida específica', async () => {
+    const body = {
+      homeTeamGoals: 3,
+      awayTeamGoals: 2
+    }
+
+    chaiHttpResponse = await chai.request(app)
+    .patch('/matchs/1')
+    .send(body)
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+    }) as Response;
+  });
   
 });
 /* describe('Seu teste', () => {
