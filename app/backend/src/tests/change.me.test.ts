@@ -38,6 +38,22 @@ describe('Testando o endpoint login', () => {
   });
 });
 
+/* testando endpoint clubs */
+describe('Testando endpoit clubs', () => {
+  let chaiHttpResponse: Response;
+
+  /* requisito 16 */
+  it('retorna uma resposta com status 200 e com json com os clubes', async () => {
+    chaiHttpResponse = await chai.request(app)
+    .get('/clubs')
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.eql(clubs);
+    }) as Response;
+  });
+});
+
+
 /* describe('Seu teste', () => {
    // Exemplo do uso de stubs com tipos
 
