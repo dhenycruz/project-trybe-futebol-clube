@@ -1,7 +1,5 @@
-import MatchService from '../services/match.service';
+import service from '../services/match.service';
 import { IMatchs } from '../interfaces/match.interface';
-
-const service = new MatchService();
 
 interface IBodyMatch {
   homeTeam: number,
