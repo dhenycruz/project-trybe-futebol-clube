@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import ClubController from '../controller/club.controller';
+import controller from '../controller/club.controller';
 
 const clubRouter = Router();
-const controller = new ClubController();
 
 clubRouter.get(
   '/clubs',

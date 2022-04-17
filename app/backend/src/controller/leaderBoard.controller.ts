@@ -13,7 +13,7 @@ interface IClubPerfomance {
   efficiency: number
 }
 
-export default class ControllerLeaderBoard {
+class ControllerLeaderBoard {
   private table: IClubPerfomance[];
 
   async getLeaderAll(): Promise <IClubPerfomance[]> {
@@ -34,3 +34,5 @@ export default class ControllerLeaderBoard {
     return result;
   }
 }
+
+export default new ControllerLeaderBoard();

@@ -5,7 +5,7 @@ interface Error {
   message: string;
 }
 
-export default class LoginController {
+class LoginController {
   private email: string;
 
   private passowrd: string;
@@ -51,3 +51,5 @@ export default class LoginController {
     return result.user;
   }
 }
+
+export default new LoginController();

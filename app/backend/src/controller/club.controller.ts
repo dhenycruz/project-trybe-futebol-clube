@@ -5,7 +5,7 @@ interface Iclub {
   clubName: string;
 }
 
-export default class ClubController {
+class ClubController {
   private clubs: Iclub[];
 
   private club: Iclub;
@@ -23,3 +23,5 @@ export default class ClubController {
     return this.clubs;
   }
 }
+
+export default new ClubController();

@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import verifyToken from '../middleware/verifyToken';
-import MatchController from '../controller/match.controller';
+import controller from '../controller/match.controller';
 import finishMatch from '../middleware/match';
 
 const matchRouter = Router();
-const controller = new MatchController();
 
 interface Ireq {
   query: {

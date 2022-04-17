@@ -21,7 +21,7 @@ interface IError {
   message: string;
 }
 
-export default class MatchController {
+class MatchController {
   private matchs: IMatchs[];
 
   private newMatch: IMatchs;
@@ -68,3 +68,5 @@ export default class MatchController {
     await service.editMatch(id, body);
   }
 }
+
+export default new MatchController();

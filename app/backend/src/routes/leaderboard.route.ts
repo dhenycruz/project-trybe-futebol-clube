@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import ControllerLeaderBoard from '../controller/leaderBoard.controller';
+import controller from '../controller/leaderBoard.controller';
 
-const controller = new ControllerLeaderBoard();
 const leaderBoardRouter = Router();
 
 leaderBoardRouter.get(

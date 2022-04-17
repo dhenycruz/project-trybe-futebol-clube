@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-import MatchController from '../controller/match.controller';
-
-const controller = new MatchController();
+import controller from '../controller/match.controller';
 
 const finishMatch = async (req: Request, res: Response) => {
   const { id } = req.params;
