@@ -3,14 +3,12 @@ import AuthToken from '../token/token';
 import User from '../database/models/User';
 import verifyEmail from '../validation/validation';
 
-const token = new AuthToken();
-
 interface IAuthToken {
   auth: boolean,
   user: string,
 }
 
-export default class LoginService {
+class LoginService {
   private email: string;
 
   private password: string;
@@ -27,7 +25,7 @@ export default class LoginService {
 
     if (!bcrypt.compareSync(this.password, resultEmail[0].password)) return false;
 
-    const resultToken = token.createToken(resultEmail[0]);
+    const resultToken = AuthToken.createToken(resultEmail[0]);
 
     return { user: {
       id: resultEmail[0].id,
@@ -47,6 +45,8 @@ export default class LoginService {
 
   async validateLogin(tokenHeader: string): Promise <false | IAuthToken> {
     this.token = tokenHeader;
-    return token.authToken(this.token);
+    return AuthToken.authToken(this.token);
   }
 }
+
+export default new LoginService();

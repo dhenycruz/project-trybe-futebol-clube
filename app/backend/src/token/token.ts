@@ -17,7 +17,7 @@ interface IAuthToken {
   user: string,
 }
 
-export default class Token implements Itoken {
+class Token implements Itoken {
   private token: string;
 
   private authentication: boolean;
@@ -45,3 +45,5 @@ export default class Token implements Itoken {
     };
   }
 }
+
+export default new Token();

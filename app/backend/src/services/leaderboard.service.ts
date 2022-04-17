@@ -1,9 +1,7 @@
 import { Op } from 'sequelize';
-import ClubService from './club.service';
+import serviceClub from './club.service';
 import Match from '../database/models/Match';
 import LeaderboardBase from './leaderboardBase.service';
-
-const serviceClub = new ClubService();
 
 interface IClubPerfomance {
   name: string,
@@ -18,7 +16,7 @@ interface IClubPerfomance {
   efficiency: number
 }
 
-export default class Leaderboard extends LeaderboardBase {
+class Leaderboard extends LeaderboardBase {
   private totalLossesHome: number;
 
   private totalLossesAway: number;
@@ -226,3 +224,5 @@ export default class Leaderboard extends LeaderboardBase {
     return classification;
   }
 }
+
+export default new Leaderboard();

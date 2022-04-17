@@ -1,6 +1,4 @@
-import LoginService from '../services/login.service';
-
-const service = new LoginService();
+import service from '../services/login.service';
 
 interface Error {
   status: number;

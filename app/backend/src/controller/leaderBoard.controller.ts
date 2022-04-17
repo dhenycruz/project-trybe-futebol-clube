@@ -1,6 +1,4 @@
-import Leaderboard from '../services/leaderboard.service';
-
-const service = new Leaderboard();
+import service from '../services/leaderboard.service';
 
 interface IClubPerfomance {
   name: string,

@@ -22,7 +22,7 @@ interface IError {
   message: string;
 }
 
-export default class MatchService {
+class MatchService {
   private matchs: Match[];
 
   private newMatch: InewMatch;
@@ -130,3 +130,5 @@ export default class MatchService {
     );
   }
 }
+
+export default new MatchService();

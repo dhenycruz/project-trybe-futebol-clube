@@ -5,7 +5,7 @@ interface Iclub {
   clubName: string;
 }
 
-export default class ClubService {
+class ClubService {
   private clubs: Iclub[];
 
   private club: Iclub;
@@ -24,3 +24,5 @@ export default class ClubService {
     return clubs;
   }
 }
+
+export default new ClubService();

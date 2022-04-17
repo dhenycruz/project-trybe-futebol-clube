@@ -1,6 +1,4 @@
-import ClubService from '../services/club.service';
-
-const service = new ClubService();
+import service from '../services/club.service';
 
 interface Iclub {
   id: number;
