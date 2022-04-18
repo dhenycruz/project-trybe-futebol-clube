@@ -1,9 +1,8 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import chaiHttp = require('chai-http');
+import chaiHttp from 'chai-http';
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
 
@@ -11,34 +10,22 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Seu teste', () => {
-  /**
-   * Exemplo do uso de stubs com tipos
-   */
+describe('Tesando o endpoint /login', () => {
+  describe('Quando enviamos um email inválido', () => {
+    let chaiHttpResponse: Response;
+    const body = {
+      email: 'mailmailcom',
+      password: '123456'
+    }
 
-  // let chaiHttpResponse: Response;
-
-  // before(async () => {
-  //   sinon
-  //     .stub(Example, "findOne")
-  //     .resolves({
-  //       ...<Seu mock>
-  //     } as Example);
-  // });
-
-  // after(()=>{
-  //   (Example.findOne as sinon.SinonStub).restore();
-  // })
-
-  // it('...', async () => {
-  //   chaiHttpResponse = await chai
-  //      .request(app)
-  //      ...
-
-  //   expect(...)
-  // });
-
-  it('Seu sub-teste', () => {
-    expect(false).to.be.eq(true);
+    it('Retorna um status 401 e com a messagem de erro', async () => {
+      chaiHttpResponse = await chai.request(app)
+      .post('/login')
+      .send(body)
+      .then((res) => {
+        expect(res.status).to.be.equal(401);
+        expect(res.body).to.be.equal({ message: 'Incorrect email or password'})
+      }) as Response;
+    });
   });
 });
