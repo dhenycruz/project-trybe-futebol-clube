@@ -1,6 +1,6 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import chaiHttp from 'chai-http';
+import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 
@@ -24,7 +24,7 @@ describe('Tesando o endpoint /login', () => {
       .send(body)
       .then((res) => {
         expect(res.status).to.be.equal(401);
-        expect(res.body).to.be.equal({ message: 'Incorrect email or password'})
+        expect(res.body).to.be.eql({ message: 'Incorrect email or password'})
       }) as Response;
     });
   });
