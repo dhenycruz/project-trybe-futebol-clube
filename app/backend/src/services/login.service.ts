@@ -15,15 +15,24 @@ class LoginService {
 
   private token: string;
 
+  authEmail(email: string): true | false {
+    this.email = email;
+    const result = verifyEmail(email);
+    if (!result) return false;
+    return true;
+  }
+
   async logining(email: string, password: string) {
     this.email = email;
     this.password = password;
 
     const resultEmail = await User.findAll({ where: { email } });
 
-    if (!resultEmail.length) return false;
+    if (resultEmail.length < 1) return false;
 
-    if (!bcrypt.compareSync(this.password, resultEmail[0].password)) return false;
+    const checkPassowrd = bcrypt.compareSync(this.password, resultEmail[0].password);
+
+    if (!checkPassowrd) return false;
 
     const resultToken = AuthToken.createToken(resultEmail[0]);
 
@@ -34,13 +43,6 @@ class LoginService {
       email: resultEmail[0].email,
     },
     token: resultToken };
-  }
-
-  authEmail(email: string): true | false {
-    this.email = email;
-    const result = verifyEmail(email);
-    if (!result) return false;
-    return true;
   }
 
   async validateLogin(tokenHeader: string): Promise <false | IAuthToken> {

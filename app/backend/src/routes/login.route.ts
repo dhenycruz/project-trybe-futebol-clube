@@ -23,7 +23,9 @@ loginRoute.post(
   async (req, res) => {
     const { email, password } = req.body;
     const result = await login.logining(email, password);
-    res.status(200).json(result);
+    if (!result) return res.status(401).json({ message: 'Incorrect email or password' }); // { status: 401, message: 'Incorrect email or password' };
+
+    res.status(201).json(result);
   },
 );
 
