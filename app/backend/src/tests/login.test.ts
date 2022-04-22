@@ -139,9 +139,57 @@ describe('Tesando o endpoint /login', () => {
       .post('/login')
       .send(body)
       .then((res) => {
-        expect(res.status).to.be.equal(201);
+        expect(res.status).to.be.equal(200);
         expect(res.body).to.have.keys('user', 'token');
       }) as Response;
     });
+  });
+});
+
+describe('Testando o endpoint /login/validate', () => {
+  describe('Quando nao passa um token', () => {
+    beforeEach(sinon.restore)
+    let chaiHttpResponse: Response;
+
+    it('Retorna status 401', async () => {
+      chaiHttpResponse = await chai.request(app)
+      .get('/login/validate')
+      .then((res) => {
+        expect(res.status).to.be.equal(401);
+        expect(res.body).to.be.eql({ message: 'No authorization!' });
+      }) as Response;
+    });
+  });
+
+  describe('Quando passa um token inválido', () => {
+    beforeEach(sinon.restore);
+    let chaiHttpResponse: Response;
+
+    it('Retorna status 401 e a mesagem de No authorization!', async () => {
+      chaiHttpResponse = await chai.request(app)
+      .get('/login/validate')
+      .set('authorization', 'notoken')
+      .then((res) => {
+        expect(res.status).to.be.equal(401);
+         expect(res.body).to.be.eql({ message: 'No authorization!' });
+      }) as Response
+    })
+  });
+
+  describe('Quando passa um token válido', () => {
+    beforeEach(sinon.restore);
+    let chaiHttpResponse: Response;
+
+    it('Retorna status 200 e o role do user', async () => {
+      sinon.stub(AuthToken, 'authToken').resolves({ auth: true, user: 'admin'});
+
+      chaiHttpResponse = await chai.request(app)
+      .get('/login/validate')
+      .set('authorization', 'tokenvalido')
+      .then((res) => {
+        expect(res.status).to.be.equal(200);
+         expect(res.body).to.be.eql({ auth: true, user: 'admin'});
+      }) as Response
+    })
   });
 });

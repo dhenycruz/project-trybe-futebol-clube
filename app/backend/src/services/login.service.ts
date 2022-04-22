@@ -45,7 +45,7 @@ class LoginService {
     token: resultToken };
   }
 
-  async validateLogin(tokenHeader: string): Promise <false | IAuthToken> {
+  async validateLogin(tokenHeader: string): Promise <false | IAuthToken | undefined> {
     this.token = tokenHeader;
     return AuthToken.authToken(this.token);
   }

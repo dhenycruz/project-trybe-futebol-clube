@@ -34,6 +34,8 @@ loginRoute.get('/login/validate', async (req, res) => {
   if (!authorization) return res.status(401).json({ message: 'No authorization!' });
 
   const result = await login.validateLogin(authorization);
+  if (!result) return res.status(401).json({ message: 'No authorization!' });
+
   res.json(result);
 });
 

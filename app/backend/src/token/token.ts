@@ -9,14 +9,13 @@ interface ReturnVerify {
 
 interface Itoken {
   createToken(user: Iuser): string,
-  authToken(token: string): Promise<false | IAuthToken>
+  authToken(token: string): void;
 }
 
 interface IAuthToken {
   auth: boolean,
   user: string,
 }
-
 class Token implements Itoken {
   private token: string;
 
@@ -29,20 +28,25 @@ class Token implements Itoken {
     return this.token;
   }
 
-  async authToken(token: string): Promise <false | IAuthToken> {
+  async authToken(token: string): Promise <false | IAuthToken | undefined> {
     const secret = fs.readFileSync('./jwt.evaluation.key');
-    const decodec = jwt.verify(token, secret) as ReturnVerify;
-    const user = await modelUser.findAll({ where: {
-      email: decodec.data.email,
-    } });
+    try {
+      const decodec = jwt.verify(token, secret) as ReturnVerify;
 
-    this.authentication = false;
-    if (!user) return this.authentication;
+      const user = await modelUser.findAll({ where: {
+        email: decodec.data.email,
+      } });
 
-    return {
-      auth: true,
-      user: decodec.data.role,
-    };
+      this.authentication = false;
+      if (!user) return this.authentication;
+
+      return {
+        auth: true,
+        user: decodec.data.role,
+      };
+    } catch (e) {
+      console.log('');
+    }
   }
 }
 

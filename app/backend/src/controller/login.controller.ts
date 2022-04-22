@@ -49,7 +49,7 @@ class LoginController {
 
     if (result === false) return { status: 401, message: 'Token invalid!' };
 
-    return result.user;
+    return result;
   }
 }
 
