@@ -166,6 +166,7 @@ describe('Testando o endpoint /login/validate', () => {
     let chaiHttpResponse: Response;
 
     it('Retorna status 401 e a mesagem de No authorization!', async () => {
+      sinon.stub(AuthToken, 'authToken').resolves(false);
       chaiHttpResponse = await chai.request(app)
       .get('/login/validate')
       .set('authorization', 'notoken')
@@ -188,7 +189,7 @@ describe('Testando o endpoint /login/validate', () => {
       .set('authorization', 'tokenvalido')
       .then((res) => {
         expect(res.status).to.be.equal(200);
-         expect(res.body).to.be.eql({ auth: true, user: 'admin'});
+         expect(res.body).to.be.equal('admin');
       }) as Response
     })
   });

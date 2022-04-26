@@ -42,14 +42,14 @@ class LoginController {
     return result;
   }
 
-  async validateLogin(tokenHeader: string) {
+  async validateLogin(tokenHeader: string): Promise <false | string | undefined> {
     this.token = tokenHeader;
 
     const result = await service.validateLogin(this.token);
 
-    if (result === false) return { status: 401, message: 'Token invalid!' };
+    if (!result) return false;
 
-    return result;
+    return result.user;
   }
 }
 

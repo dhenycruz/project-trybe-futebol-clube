@@ -45,7 +45,7 @@ class Token implements Itoken {
         user: decodec.data.role,
       };
     } catch (e) {
-      console.log('');
+      return false;
     }
   }
 }
